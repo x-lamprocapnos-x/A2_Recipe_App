@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
@@ -8,6 +9,10 @@ class Recipe(models.Model):
         help_text="Enter the ingredients, seperated by a comma"
         )
     cooking_time = models.IntegerField(help_text='Time in minutes')
+
+    # Author field linked to Django's User model
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
 
     # calculate difficulty
     def calculate_difficulty(self):

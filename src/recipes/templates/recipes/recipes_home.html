@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- recipe_home.html -->
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The Recipes App</title>
+{% block title %}Welcome | Recipe App{% endblock%}
 
-</head>
-
-<body>
-    <H1>Welcome to the recipe app homepage!</H1>
-    <p>Discover, create, and manage your recipes here! (Coming soon)</p>
-
-</body>
-
-</html>
+{% block content %}
+<h1>Welcome to the Recipe App Homepage!</h1>
+<p>
+    Discover, create, and manage your recipes here!
+    We look forward to seeing your kitchen challenges
+    and your delightful happy accidents.
+</p>
+{% endblock %}

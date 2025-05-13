@@ -9,9 +9,10 @@ class Recipe(models.Model):
         help_text="Enter the ingredients, seperated by a comma"
         )
     cooking_time = models.IntegerField(help_text='Time in minutes')
-
-    # Author field linked to Django's User model
+    instructions = models.TextField(null=True) # Detailed steps
+    image = models.ImageField(upload_to='recipe_images/', blank=True, null=True) # Visual enhancement
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    difficulty = models.CharField(max_length=20, blank=True) # Store difficulty
 
 
     # calculate difficulty
@@ -25,6 +26,10 @@ class Recipe(models.Model):
             return 'Moderate'
         else:
             return 'Hard'
+
+    def save(self, *args, **kwargs):
+        self.difficulty = self.calculate_difficulty()
+        super().save(args, **kwargs)
 
     def __str__(self):
         return self.name

@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import home
+from . import views
 
 app_name = 'recipes'
+
 urlpatterns = [
-    path('', home, name='home'),
+    path('', views.recipes_home, name='recipes_home'), # Landing page
+    path('recipes/', views.recipe_list, name='recipe_list'), # Full List
+    path('recipes/<int:pk>/', views.recipe_details, name='recipe_details'), # Singular recipe details
 ]

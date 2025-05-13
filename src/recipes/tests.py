@@ -1,12 +1,16 @@
 from django.test import TestCase
+from django.urls import reverse
+from django.http import HttpResponse
 from .models import Recipe
 
 # Create your tests here.
+
+# Recipe model tests
 class RecipeModelTest(TestCase):
 
     # Test data
     def setUp(self):
-        Recipe.objects.create(
+        self.recipe = Recipe.objects.create(
             name='Tea',
             description='Herbal',
             ingredients='Tea Leaves, Sugar, Water',
@@ -40,8 +44,41 @@ class RecipeModelTest(TestCase):
         recipe = Recipe(name='Ramen', description='Fancy Soup', ingredients='Noodles, Water, Eggs, Corn, Shrimp, Chili Crisps ', cooking_time=20)
         self.assertEqual(recipe.calculate_difficulty(), 'Hard')
 
+# Recipe view/url tests
+class RecipeViewTests(TestCase):
 
-
+    # Test data
+    def setUp(self):
+        seld.recipe = Recipe.objects.create(
+            name='Tea',
+            description='Herbal',
+            ingredients='Tea Leaves, Sugar, Water',
+            cooking_time='5'
+        )
     
+    def test_recipe_list_url_exists(self):
+        response = self.client.get(reverse('recipe:recipe_list'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_recipes_details_url_exists(self):
+        response = self.client.get(reverse('recipe:recipe_details', args=[self.recipe.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_recipe_list_template_used(self):
+        response = self.client.get(reverse('recipe_list'))
+        self.assertTemplateUsed(response, 'recipes/recipe_list.html')
+
+    def test_recipe_details_template_used(self):
+        response = self.client.get(reverse('recipe_details', args=[self.recipe.id]))
+        self.assertTemplateUsed(response, 'recipes/recipe_details.html')
+
+    def test_recipe_list_contains_recipe(self):
+        response = self.client.get(reverse('recipe_list'))
+        self.assertContains(response, "Tea")
+
+    def test_recipe_details_contains_recipe_info(self):
+        response = self.client.get(reverse('recipe_details', args=[self.recipe.id]))
+        self.assertContains(response, 'Tea')
+        self.assertContains(response, 'Tea Leaves')
 
 

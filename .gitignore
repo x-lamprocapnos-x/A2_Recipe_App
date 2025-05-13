@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migration files (optional – only if you don't want to track them all)
+# Comment out the line below if you want to keep migration files under version control
+# **/migrations/*.py
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+# SQLite database (used in local dev only)
+db.sqlite3
+db.sqlite3-journal
+
+# VS Code settings
+.vscode/
+
+# Environment files
+.env
+*.env
+
+# Virtualenvs
+venv/
+env/
+ENV/
+.venv/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Test and coverage files
+.coverage
+htmlcov/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.tox/
+.pytest_cache/

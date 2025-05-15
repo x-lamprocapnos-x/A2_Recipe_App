@@ -1,4 +1,5 @@
 <!-- base.html-->
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -6,45 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Recipe App{% endblock %}</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-
-        nav {
-            background-color: #f9a251;
-            padding: 1em;
-        }
-
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 1em;
-        }
-
-        nav ul li {
-            display: inline;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            padding: 2em;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'recipes/css/styles.css' %}">
 </head>
 
 <body>

@@ -4,15 +4,19 @@
 {% block title %}{{ recipe.name }} - Details{% endblock%}
 
 {% block content%}
-<div class="container recipe-detail">
-    <h1>{{recipe.name}}</h1>
-    <p><strong>Author: </strong>{{recipe.author.username}}</p>
-    <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
-    <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
-    <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
-    <p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+<div class="container recipe-detail-flex">
     {% if recipe.image %}
-    <img src="{{ recipe.image.url }}" alt="{{ recipe.name }} image">
+    <div class="recipe-image">
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.name }} image">
+    </div>
     {% endif %}
+    <div class="recipe-info">
+        <h1>{{recipe.name}}</h1>
+        <p><strong>Author: </strong>{{recipe.author.username}}</p>
+        <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+        <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+        <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+        <p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+    </div>
 </div>
 {% endblock %}

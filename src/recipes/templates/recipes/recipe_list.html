@@ -8,16 +8,14 @@
     <h1>All Recipes</h1>
     <div class="recipe-list">
         {% for recipe in recipes %}
-        <div class="card">
-            {% if recipe.image %}
-            <img src="{{ recipe.image.url }}" alt="{{ recipe.name }} image">
-            {% endif %}
-            <div class="content">
-                <h3><a href="{% url 'recipes:recipe_details' recipe.id %}">{{ recipe.name }}</a></h3>
-                <p><strong>Difficulty:</strong> {{ recipe.difficulty}} </p>
-                <p><strong>Time:</strong> {{ recipe.cooking_time }} min </p>
+        <a href="{% url 'recipes:recipe_details' recipe.id %}" class="card-link">
+            <div class="card">
+                {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }} image">
+                {% endif %}
+                <h3>{{ recipe.name }}</h3>
             </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
 </div>

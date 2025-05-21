@@ -1,15 +1,37 @@
 <!-- recipe_home.html -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Welcome | Recipe App{% endblock%}
 
 {% block content %}
 <div class="container">
+    <div class="homepage-banner">
+        <img src="{% static 'recipes/images/love-food.png'}"
+            alt="An image of a counter mid meal prep, with the test Recipes are made from love">
+    </div>
     <h1>Welcome to the Recipe App Homepage!</h1>
     <p>
         Discover, create, and manage your recipes here!
         We look forward to seeing your kitchen challenges
         and your delightful happy accidents.
     </p>
+
+    <!-- Featured Rectipes Section -->
+    <h2>Featured Recipes</h2>
+    <div class="recipe-list">
+        {% for recipe in recipes %}
+        {% if forloop.counter0|divisibleby:2 %}
+        <a href="{% url 'recipes:recipe_details' recipe.id %}" class="card-link">
+            <div class="card">
+                {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}">
+                {% endif %}
+                <h3>{{ recipe.name }}</h3>
+            </div>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

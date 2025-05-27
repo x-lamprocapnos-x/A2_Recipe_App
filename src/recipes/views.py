@@ -25,3 +25,7 @@ def recipe_details(request, pk):
 # Log out success 
 def logout_success(request):
     return render(request, 'recipes/success.html')
+
+# log in success
+def login_success(request):
+    return render(request, 'recipes/success.html')

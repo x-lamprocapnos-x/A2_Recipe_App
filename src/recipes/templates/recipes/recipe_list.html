@@ -4,18 +4,21 @@
 {% block title %}All Recipes | Recipe App {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     <h1>All Recipes</h1>
-    <div class="recipe-list">
+    <div class="row">
         {% for recipe in recipes %}
-        <a href="{% url 'recipes:recipe_details' recipe.id %}" class="card-link">
-            <div class="card">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
                 {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }} image">
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
                 {% endif %}
-                <h3>{{ recipe.name }}</h3>
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                    <a href="{% url 'recipes:recipe_details' recipe.id %}" class="btn btn-primary">View Details</a>
+                </div>
             </div>
-        </a>
+        </div>
         {% endfor %}
     </div>
 </div>

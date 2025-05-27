@@ -1,36 +1,13 @@
 /* styles.css */
 body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: "DynaPuff", system-ui;
     background-color: #f8f8f8;
 }
 
-nav {
+.custom-navbar {
     background-color: #f9a251;
     padding: 1em;
-}
-
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 1em;
-}
-
-nav ul li {
-    display: inline;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01)
 }
 
 main {
@@ -48,22 +25,17 @@ h1, h2, h3 {
     color: #2e2e2e;
 }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
+/* insert card here? */
+
+.recipe-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
-.card {
-    background-color: rgb(253, 225, 212);
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+.card-link:hover .card {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .card img {
@@ -71,11 +43,8 @@ h1, h2, h3 {
     height: 150px;
     object-fit: cover;
     border-top-left-radius: 8px;
-    border-top-right-radius: 8px
-}
-
-.card .content {
-    flex: 1;
+    border-top-right-radius: 8px;
+    transition: transform 0.4s ease;
 }
 
 .recipe-list {
@@ -85,6 +54,56 @@ h1, h2, h3 {
     padding: 1rem;
 }
 
-.recipe-detail {
-    line-height: 1.6;
+.recipe-detail-flex {
+    display: flex;
+    gap: 2rem;
+    align-items: flex start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; /* ensures wrapping on smaller screens */
+}
+
+.recipe-image {
+    flex: 1 1 300px;
+    min-width: 150px;
+    max-width: 400px;
+}
+
+.recipe-image img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
+}
+
+.recipe-info {
+    flex: 2 1 400px;
+}
+
+/* To be added later :) ( use heart icon and classify it as favorite )
+
+.favorite {
+    font-size: 1.5rem;
+    color: #ccc;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.favorite.active {
+    color: red;
+} 
+
+*/
+
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5em;
+    }
+
+    .card img {
+        height: 200px;
+    }
 }

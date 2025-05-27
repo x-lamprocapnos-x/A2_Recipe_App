@@ -5,16 +5,12 @@
 {% block title %}Welcome | Recipe App{% endblock%}
 
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     {% if user.is_authenticated %}
     <h1>Welcome, {{ user.username }}!</h1>
-    <p><a href="{% url 'logout' %}">Logout</a> </p>
-    {% else %}
-    <p><a href="{% url 'login' %}">Login</a> </p>
     {% endif %}
-    <div class="homepage-banner">
-        <img src="{% static 'recipes/images/love-food.png' %}"
-            alt="An image of a counter mid meal prep, with the test Recipes are made from love">
+    <div class="my-4 text-center">
+        <img src="{% static 'recipes/images/love-food.png' %}" class="img-fluid" alt="Recipes are made from love">
     </div>
     <p>
         Discover, create, and manage your recipes here!
@@ -24,17 +20,20 @@
 
     <!-- Featured Rectipes Section -->
     <h2>Featured Recipes</h2>
-    <div class="recipe-list">
+    <div class="row">
         {% for recipe in recipes %}
         {% if forloop.counter0|divisibleby:2 %}
-        <a href="{% url 'recipes:recipe_details' recipe.id %}" class="card-link">
-            <div class="card">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
                 {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}">
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
                 {% endif %}
-                <h3>{{ recipe.name }}</h3>
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                    <a href="{% url 'recipes:recipe_details' recipe.id %}" class="btn btn-primary">View Details</a>
+                </div>
             </div>
-        </a>
+        </div>
         {% endif %}
         {% endfor %}
     </div>

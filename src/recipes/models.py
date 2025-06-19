@@ -1,7 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+FOOD_TYPES = [
+    ('Breakfast', 'Breakfast'),
+    ('Lunch', 'Lunch'),
+    ('Dinner', 'Dinner'),
+    ('Drink', 'Drink'),
+    ('Appetizer', 'Appetizer'),
+]
+
 class Recipe(models.Model):
+    food_type = models.CharField(max_length=20, choices=FOOD_TYPES, default='Lunch')
     name = models.CharField(max_length=50)
     description = models.TextField()
     ingredients = models.CharField(

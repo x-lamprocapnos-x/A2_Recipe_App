@@ -29,3 +29,24 @@ def logout_success(request):
 # log in success
 def login_success(request):
     return render(request, 'recipes/success.html')
+
+# search recipes
+def search_recipe(request):
+    form = RecipeSearchForm(request.GET or None)
+    recipe = Recipe.objects.all()
+
+    if form.is_valid():
+        query = form.cleaned_data.get('query')
+        food_type = form.cleaned_data.get('food_type')
+
+        if query:
+            recipe = recipes.filter(name_icontains=query)
+
+        if food_type:
+            recipes = recipes.filter(food_type=food_type)
+
+    context = {
+        'form' : form,
+        'recipes' : recipes
+    }
+    return render(request, 'recipes/recipe_search_html', context)

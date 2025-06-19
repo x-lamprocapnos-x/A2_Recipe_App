@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .models import Recipe
+from .forms import RecipeSearchForm
 
 # Create your tests here.
 
@@ -113,4 +114,39 @@ class RecipeViewTests(TestCase):
         self.assertContains(response, 'Tea')
         self.assertContains(response, 'Tea Leaves')
 
+# Recipe Search Tests
+class RecipeSearchTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user3', password='password')
+        Recipe.objects.create(
+            name='Avocado Toast',
+            description='Simple Breakfast',
+            ingredients='Avocado, Bread, Salt, Lemon',
+            cooking_time=5,
+            author=self.user
+        )
+        Recipe.object.create(
+            name='Pizza Dough',
+            description='Easy no yeast dough'
+            ingredients='Water, Flour, Oil, Baking Powder'
+            cooking_time=15
+            author=self.user
+        )
 
+        def test_search_form_fields_exist(self):
+            form = RecipeSearchForm()
+            self.assertIn('query', form.fields)
+
+        def test_search_by_recipe_name_returns_result(self):
+            response = self.client.get(reverse('recipes:search') + '?query=Pizza Dough')
+            self.assertContains(response, 'Pizza Dough')
+
+        def test_partial_search_returns_result(self):
+            response = self.client.get(reverse('recipes:search') + '?query=Avocado')
+            self.assertContains(response, 'Avocado Toast')
+
+        def test_search_result_links_to_detail_page(self):
+            recipe = Recipe.objects.get(name='Avocado Toast')
+            detail_url = reverse('recipes:recipe_datails', args=[recipe.id])
+            response = self.client.get(reverse('recipes:search') + '?query=Avocado')
+            self.assertContains(response, detail_url)

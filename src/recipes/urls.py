@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.recipes_home, name='recipes_home'), # Landing page
     path('recipes/', views.recipe_list, name='recipe_list'), # Full List
     path('recipes/<int:pk>/', views.recipe_details, name='recipe_details'), # Singular recipe details
+    path('search/', views.recipe_search, name='recipe_search'),
     path('success/', views.login_success, name='success'),
     path('logout-success/', views.logout_success, name='logout_success'), # Successful logout message
 ]

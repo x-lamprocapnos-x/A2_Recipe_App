@@ -128,7 +128,7 @@ class RecipeSearchTests(TestCase):
         self.recipe = Recipe.objects.create(
             name='Avocado Toast',
             description='Simple Breakfast',
-            ingredients='Avocado, Bread, Salt, Lemon',
+            ingredients='Avocado, Bread, Salt',
             cooking_time=5,
             author=self.user,
         )
@@ -145,19 +145,61 @@ class RecipeSearchTests(TestCase):
         self.assertIn('query', form.fields)
 
     def test_search_by_recipe_name_returns_result(self):
-        response = self.client.get(reverse('recipes:recipe_search') + '?query=Pizza Dough')
+        response = self.client.get(reverse('recipes:recipe_search'), {
+            'query': 'Pizza',
+            'ingredients': '',
+            'food_type': '',
+            'cooking_time': '',
+            'difficulty': ''
+            })
         self.assertContains(response, 'Pizza Dough')
 
+    def test_search_by_ingredient(self):
+        response = self.client.get(reverse('recipes:recipe_search'), {'ingredients': 'Flour'})
+        self.assertContains(response, 'Pizza Dough')
+
+    def test_search_by_food_type(self):
+        response = self.client.get(reverse('recipes:recipe_search'), {'food_type': 'Lunch'})
+        self.assertContains(response, 'Avocado Toast')
+
+    def test_search_by_cooking_time(self):
+        response = self.client.get(reverse('recipes:recipe_search'), {'cooking_time': 10})
+        self.assertContains(response, 'Avocado Toast')
+
+    def test_search_difficulty(self):
+        response = self.client.get(reverse('recipes:recipe_search'), {'difficulty': 'Easy' })
+        self.assertContains(response, 'Avocado Toast')
+
     def test_partial_search_returns_result(self):
-        response = self.client.get(reverse('recipes:recipe_search') + '?query=Avocado')
+        response = self.client.get(reverse('recipes:recipe_search'), {
+            'query': 'Avocado',
+            'ingredients': '',
+            'food_type': '',
+            'cooking_time': '',
+            'difficulty': ''
+            })
+        self.assertContains(response, 'Avocado Toast')
+
+    def test_search_combined_filters(self):
+        response = self.client.get(reverse('recipes:recipe_search'), {
+            'query': 'Avocado',
+            'ingredients': 'Bread',
+            'food_type': 'Lunch',
+            'cooking_time': 10,
+            'difficulty': 'Easy'
+        })
         self.assertContains(response, 'Avocado Toast')
 
     def test_search_result_links_to_detail_page(self):
         recipe = Recipe.objects.get(name='Avocado Toast')
         detail_url = reverse('recipes:recipe_details', args=[recipe.id])
-        response = self.client.get(reverse('recipes:recipe_search') + '?query=Avocado')
+        response = self.client.get(reverse('recipes:recipe_search'), {'query' : 'Avocado'})
         self.assertContains(response, detail_url)
         
     def test_recipe_has_food_type_field(self):
         field = self.recipe._meta.get_field('food_type')
         self.assertEqual(field.choices, FOOD_TYPES)
+    
+    def test_invalid_search_query_shows_no_results_message(self):
+        response = self.client.get(reverse('recipes:recipe_search'), {'query' : 'notarealrecipe'})
+        self.assertContains(response, 'No recipes found.')

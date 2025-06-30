@@ -120,6 +120,11 @@ class RecipeViewTests(TestCase):
         response = self.client.get(reverse('recipes:recipe_search'))
         self.assertEqual(response.status_code, 200)
 
+    def test_recipe_details_redirects_if_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get(reverse('recipes:recipe_details', args=[self.recipe.id]))
+        self.assertEqual(response.status_code, 302) # Redirects to login
+
 # Recipe Search Tests
 class RecipeSearchTests(TestCase):
     def setUp(self):
@@ -203,3 +208,11 @@ class RecipeSearchTests(TestCase):
     def test_invalid_search_query_shows_no_results_message(self):
         response = self.client.get(reverse('recipes:recipe_search'), {'query' : 'notarealrecipe'})
         self.assertContains(response, 'No recipes found.')
+
+    def test_search_form_field_exists(self):
+        form = RecipeSearchForm()
+        self.assertIn('query', form.fields)
+    
+    def test_search_form_chart_type_field_exists(self):
+        form = RecipeSearchForm()
+        self.assertIn('chart_type', form.fields)

@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore Django static files (they get collected with collectstatic)
+**/static/admin/
+staticfiles/
+
 # Django migration files (optional – only if you don't want to track them all)
 # Comment out the line below if you want to keep migration files under version control
 # **/migrations/*.py

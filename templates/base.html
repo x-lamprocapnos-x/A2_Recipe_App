@@ -28,9 +28,13 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'recipes:recipes_home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'recipes:recipe_list' %}">View Recipes</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'recipes:recipe_list' %}">View Recipes</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'recipes:recipe_search'%}">Search</a> </li>
+                    
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'recipes:add_recipe' %}">Add Recipe</a></li>
+                    {% endif %}
+
                     <!-- add more nav items if needed -->
                 </ul>
                 <ul class="navbar-nav">
@@ -41,6 +45,9 @@
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipes:signup' %}">Sign Up</a>
                     </li>
                     {% endif %}
                 </ul>

@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from .models import Recipe
-from .forms import RecipeSearchForm
+from .forms import RecipeSearchForm, RecipeForm
 from .utils import get_chart
 import pandas as pd
 
@@ -16,6 +19,33 @@ def recipes_home(request):
 def recipe_list(request): 
     recipes = Recipe.objects.all()
     return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+
+# to create a user
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save() # create user
+            login(request, user) # log in new user automatically
+            return redirect('recipes:recipes_home') # redirect to home page
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'recipes/signup.html', {'form': form})
+
+# add recipe
+@login_required
+def add_recipe(request):
+    if request.method == 'POST':
+        form = RecipeForm(request.POST, request.FILES)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user # if your model has an owner field
+            recipe.save()
+            return redirect('recipes:recipe_details', pk=recipe.pk)
+    else:
+        form = RecipeForm()
+    return render(request, 'recipes/add_recipe.html', {'form': form})
 
 # to show one recipes' details
 @login_required

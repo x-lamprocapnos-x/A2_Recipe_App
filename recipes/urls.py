@@ -10,4 +10,6 @@ urlpatterns = [
     path('search/', views.recipe_search, name='recipe_search'),
     path('success/', views.login_success, name='success'),
     path('logout-success/', views.logout_success, name='logout_success'), # Successful logout message
+    path('signup/', views.signup_view, name='signup'),
+    path('add-recipe/', views.add_recipe, name='add_recipe'), # Add recipe
 ]

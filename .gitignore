@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore media files uploaded by users
+media/
 # Ignore Django static files (they get collected with collectstatic)
 **/static/admin/
 staticfiles/

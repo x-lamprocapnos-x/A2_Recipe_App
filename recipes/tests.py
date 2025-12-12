@@ -1,9 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Recipe, FOOD_TYPES
-from .forms import RecipeSearchForm
+from .forms import RecipeForm, RecipeSearchForm
 
 # Create your tests here.
 
@@ -216,3 +217,74 @@ class RecipeSearchTests(TestCase):
     def test_search_form_chart_type_field_exists(self):
         form = RecipeSearchForm()
         self.assertIn('chart_type', form.fields)
+
+class AddRecipeViewTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user4', password='password')
+
+    def test_add_recipe_redirects_if_not_logged_in(self):
+        response = self.client.get(reverse('recipes:add_recipe'))
+        self.assertEqual(response.status_code, 302) # Redirects to login
+
+    def test_add_recipe_view_loads_for_logged_in_user(self):
+        self.client.login(username='user4', password='password')
+        response = self.client.get(reverse('recipes:add_recipe'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/add_recipe.html')
+        self.assertIsInstance(response.context['form'], RecipeForm)
+
+    def test_add_recipe_creates_recipe_and_redirects(self):
+        self.client.login(username='user4', password='password')
+        data = {
+            'name': 'Pancakes',
+            'description': 'Fluffy cakes made in a pan',
+            'ingredients': 'Flour, Eggs, Milk, Sugar',
+            'cooking_time': 10,
+            'instructions': '1. Mix the ingrediants 2. pour into a pan 3. cook on low or medium, flip when you start to see bubbles 4. serve and enjoy!',
+            'food_type': 'Breakfast',
+            }
+        response = self.client.post(reverse('recipes:add_recipe'), data)
+        recipe = Recipe.objects.get(name='Pancakes')
+        self.assertRedirects(response, reverse('recipes:recipe_details', args=[recipe.pk]))
+        self.assertEqual(recipe.author, self.user) #author set to logged in user
+        
+        # should redirect to recipe details page
+        recipe = Recipe.objects.get(name='Pancakes')
+        self.assertRedirects(response, reverse('recipes:recipe_details', args=[recipe.id]))
+
+        # recipe should exist in database
+        recipe_exists = Recipe.objects.filter(name='Pancakes').exists()
+        self.assertTrue(recipe_exists)
+
+        # recipe should be associated with the logged-in user
+        self.assertEqual(recipe.author, self.user)
+
+class SignupViewTests(TestCase):
+    def test_signup_view_loads(self):
+        response = self.client.get(reverse('recipes:signup'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/signup.html')
+        self.assertIsInstance(response.context['form'], UserCreationForm)
+
+    def test_signup_creates_user_and_logs_in(self):
+        response = self.client.post(reverse('recipes:signup'), {
+            'username': 'newuser',
+            'password1': 'complexpassword123',
+            'password2': 'complexpassword123'
+            })
+        
+        # should redirect to home page
+        self.assertRedirects(response, reverse('recipes:recipes_home'))
+
+        # user should exist in database
+        user_exists = User.objects.filter(username='newuser').exists()
+        self.assertTrue(user_exists)
+
+        # user should be logged in and authenticated
+        response = self.client.get(reverse('recipes:recipes_home'))
+        user = response.wsgi_request.user
+        self.assertTrue(user.is_authenticated)
+        self.assertEqual(user.username, 'newuser')
+
+
+

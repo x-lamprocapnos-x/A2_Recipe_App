@@ -19,7 +19,7 @@ class Recipe(models.Model):
         )
     cooking_time = models.IntegerField(help_text='Time in minutes')
     instructions = models.TextField(null=True) # Detailed steps
-    image = models.ImageField(upload_to='recipe_images/', blank=True, null=True, default='recipe_images/default_img.jpg') # Visual enhancement
+    image = models.ImageField(upload_to='recipe_images/', blank=True, null=True) # Visual enhancement
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     difficulty = models.CharField(max_length=20, blank=True) # Store difficulty
 

@@ -37,6 +37,7 @@ def signup_view(request):
 @login_required
 def add_recipe(request):
     if request.method == 'POST':
+        print("FILES:", request.FILES)
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
             recipe = form.save(commit=False)
